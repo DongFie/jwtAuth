@@ -1,0 +1,19 @@
+{
+    "name": "dongfie/jwtauth",
+    "description": "This a demo for build composer packagist .",
+    "type": "Library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "gaodong",
+            "email": "1175409005@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+	"autoload": {
+        "psr-4": {
+            "DongFie\\JWT\\": "src"
+        }
+    }
+}
