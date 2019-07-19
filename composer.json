@@ -1,5 +1,5 @@
 {
-    "name": "dongfie/jwtauth",
+    "name": "dongfie/jwt_auth",
     "description": "This a demo for build composer packagist .",
     "type": "Library",
     "license": "MIT",
