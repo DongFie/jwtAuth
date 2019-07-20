@@ -13,7 +13,8 @@
     "require": {},
 	"autoload": {
         "psr-4": {
-            "DongFie\\JWT\\": "src"
+            "DongFie\\JWT\\": "src",
+            "think\\auth\\": "src/"
         }
     }
 }
