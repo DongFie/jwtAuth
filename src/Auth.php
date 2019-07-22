@@ -78,7 +78,7 @@ class Auth
      * @var object 对象实例
      */
     protected static $instance;
-    
+
 
     //默认配置
     protected $config = [
@@ -161,7 +161,10 @@ class Auth
                 }
             }
         }
+
+
         if ('or' == $relation && !empty($list)) {
+
             return true;
         }
         $diff = array_diff($name, $list);
@@ -226,12 +229,16 @@ class Auth
             return [];
         }
         $map = array(
-            'id' => ['in', $ids],
-            'type' => $type,
-            'status' => 1,
+            ['id','in',$ids],
+            ['type','=',$type],
+            ['status','=',1],
+//            'id' => ['in', $ids],
+//            'type' => $type,
+//            'status' => 1,
         );
         //读取用户组所有权限规则
-        $rules = Db::name($this->config['auth_rule'])->where($map)->field('condition,name')->select();
+        $rules = Db::name($this->config['auth_rule'])->field('condition,name')->where($map)->select();
+
         //循环规则，判断结果。
         $authList = []; //
         foreach ($rules as $rule) {

@@ -2,6 +2,7 @@
 
 
 namespace DongFie\JWT;
+use think\facade\Cache;
 
 class JWTAuth extends JWT
 {
@@ -58,6 +59,37 @@ class JWTAuth extends JWT
             return ['code' => -1, 'message' => $e->getMessage()];
         } catch (\Exception $e) {//其他错误
             return ['code' => -1, 'message' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * 通过TOKEN获取用户的信息
+     * @return \think\response\Json
+     */
+    public static function tokenGetUser()
+    {
+        $key = config('jwt.key');
+        //获取用户标识
+        $identifier = config('jwt.identifier');
+        $authorization = explode(' ', $_SERVER['HTTP_AUTHORIZATION'])[1];
+        try {
+            JWT::$leeway = 60;
+            $decoded = JWT::decode($authorization, $key, ['HS256']);
+            $getTokenUser = Cache::get('memberInfo:' . $decoded->data->$identifier);
+            if (!$getTokenUser) {
+                return json(array('code' => -2, 'message' => 'token not find'));
+            }
+            //判断账号密码
+            $unserialize = unserialize($getTokenUser);
+            return json($unserialize);
+        } catch (\Firebase\JWT\SignatureInvalidException $e) {  //签名不正确
+            return json(array('code' => -2, 'message' => $e->getMessage()));
+        } catch (\Firebase\JWT\BeforeValidException $e) {  // 签名在某个时间点之后才能用
+            return json(array('code' => -2, 'message' => $e->getMessage()));
+        } catch (\Firebase\JWT\ExpiredException $e) {  // token过期
+            return json(array('code' => -2, 'message' => $e->getMessage()));
+        } catch (\Exception $e) {  //其他错误
+            return json(array('code' => -2, 'message' => $e->getMessage()));
         }
     }
 }
